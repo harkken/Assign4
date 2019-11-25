@@ -16,6 +16,14 @@ typedef struct node{
 
 }node;
 
+//function declarations 
+char * allocate_word_memory(void);
+void test_word_array_length(int);
+void reallocate_memory(void);
+int compare_word(char *);
+node * create_node(char *);
+void add_to_list(node *, node *);
+
 
 /*
  * The encode() function may remain unchanged for A#4.
@@ -48,7 +56,10 @@ void print_all_characters(FILE * INPUT){
 	int c;
 	c = fgetc(INPUT);
 	while(c != EOF){
-		printf("%d\n", c);
+		if(c > 128){
+            c = c-128;
+        }
+        printf("%d\n", c);
 		c = fgetc(INPUT);
     }
 	
@@ -77,32 +88,26 @@ int return_number_type(int ch){
 void main_loop(FILE * INPUT, FILE * OUTPUT){
 	int c; 			 		 // character read from file
 	char * new_word; 		 // pointer to an array to store the word
+    char * word_p;          //pointer to location in word
+    word_p = new_word;
 	int returned_number = 0; // number returned from switch statement
 	int letter_count = 0;    // counts the letters read into the array
 	c = fgetc(INPUT);
-	node * head = NULL;     // head of list 
+    node * head = NULL;     // head of list 
 	while(c != EOF){
 	//Testing for characters
 		if (c > 32 && c < 128){
 			printf("Letter: %c\n", c);
 			new_word = allocate_word_memory(); // allocate memory for word
-			
+            new_word[0] = c; 
+            printf("%s\n", new_word);
+		    node * new_node;	               //CREATE new node
 			while( c > 32 && c < 128){
 				//add letters to word array that has been created 
 			}
-			//ADD COMPARE FUNCTION THEN NEXT LINE
-			//new_node = create_node(new_word);
-			if(compare_word(new_word) == 1){
-				node * new_node;
-				new_node = create_node(new_word); 
-			}
-			else{
-			// do not add word to list
-			} 
-			if(head == NULL){   
-				head = new_node;
-			}
-			//
+			new_node = create_node(new_word); 
+		    add_to_list(head, new_node);
+			
 		}
 		if(c == 10){ //if char is a newline
 			fputc(10, OUTPUT);
@@ -116,37 +121,39 @@ void main_loop(FILE * INPUT, FILE * OUTPUT){
 		}
 		c = fgetc(INPUT);
     }
+
+
+
 	
 }
 /*
 *	allocate_word_memory(): Calls malloc to allocate space for the word
 */
 char * allocate_word_memory(){
-	char * word_ptr = (char *)malloc(sizeof(char));
-	return word_ptr;	
+	char * word_ptr = (char *)malloc(sizeof(char)+1);
+	if(word_ptr == NULL){
+        printf(" failed to allocate memory for word");
+        exit(1);
+    }
+    return word_ptr;	
 }
 /*
 *	test_word_array_length(): Tests to see if array has reached max capacity yet. 
 */
 void test_word_array_length(int letter_count){
-	if(letter_count
+	// TODO
+    // if(letter_count
 }
 /*
 * 	reallocate_memory(): If word array is at max capacity, reallocates memory to larger array.
 */
 void reallocate_memory(){
-
+    // TODO
+    
 }
 
 /*
-*	compare_word(): Once all the letters have been added to the word array, compare the word to all the other words currently in the list.
-*					If there is a match the word does not need to be created and a node doesn't need to be allocated.
-*/
-int compare_word(){
-	//if match return 0, if not match return 1
-}
-/*
-*	create_node(word): Creates a new node to add to the linked list
+*	create_node(char * node, char * word): Creates a new node to add to the linked list
 */
 node * create_node(char * word){
 	node * node_p;
@@ -157,23 +164,20 @@ node * create_node(char * word){
 	}	
 	word_count++;
 	
-	if(start == NULL){
-		start = node_p;
-		start->
-	}	
+
 
 }
-void add_to_list(char * HEAD, char * node){
-	char * p; 			
+void add_to_list(node * HEAD, node * new_node){
+	node * p; 			
 	if(HEAD == NULL){
-		HEAD = node;
+		HEAD = new_node;
 	}
 	else{
 		p = HEAD;
 		while(p != NULL){
 			p = p->next;	
 		}
-		p->next = node;
+		p->next = new_node;
 	}
 }
 int decode(FILE *input, FILE *output) {
